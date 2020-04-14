@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Gradebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,18 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        return User::with('gradebook')->get()->filter(function ($user) {
+            return $user->gradebook;
+        });
+    }
+
+    public function show(User $user)
+    {
+        return $user;
+    }
+
     public function authenticate(Request $request)
     {
         $credentials = $request->only('email', 'password');
