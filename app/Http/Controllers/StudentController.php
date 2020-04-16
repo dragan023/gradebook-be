@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Gradebook;
-use App\User;
 use Illuminate\Http\Request;
+use App\Student;
 
-class GradebookController extends Controller
+class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +14,7 @@ class GradebookController extends Controller
      */
     public function index()
     {
-        $gradebooks = Gradebook::with('students')->get();
-        foreach ($gradebooks as $gradebook) {
-            $gradebook->user;
-        }
-
-        return $gradebooks;
+        //
     }
 
     /**
@@ -49,36 +43,34 @@ class GradebookController extends Controller
         //     'imageUrl' => 'url',
         // ]);
 
-        $gradebook['name'] = $request->input('name');
-        $gradebook['user_id'] = $request->input('user_id');
+        $student['first_name'] = $request->input('first_name');
+        $student['last_name'] = $request->input('last_name');
+        $student['image_url'] = $request->input('image_url');
+        $student['gradebook_id'] = $request->input('gradebook_id');
 
-        Gradebook::create($gradebook);
+        Student::create($student);
 
-        return $gradebook;
+        return $student;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Gradebook  $gradebook
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $gradebook = Gradebook::where('id', $id)->with('students')->get()[0];
-        $gradebook->user;
-        $gradebook->comments;
-
-        return $gradebook;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Gradebook  $gradebook
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Gradebook $gradebook)
+    public function edit($id)
     {
         //
     }
@@ -87,10 +79,10 @@ class GradebookController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Gradebook  $gradebook
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Gradebook $gradebook)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -98,13 +90,11 @@ class GradebookController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Gradebook  $gradebook
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $gradebook = Gradebook::find($id)->delete();
-
-        return true;
+        //
     }
 }

@@ -14,14 +14,12 @@ class UserController extends Controller
 {
     public function index()
     {
-        return User::with('gradebook')->get()->filter(function ($user) {
-            return $user->gradebook;
-        });
+        return User::with('gradebook')->get();
     }
 
-    public function show(User $user)
+    public function show($id)
     {
-        return $user;
+        return User::where('id', $id)->with('gradebook.students')->get()[0];
     }
 
     public function authenticate(Request $request)
@@ -45,11 +43,12 @@ class UserController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:8|confirmed|regex:/[0-9]/',
         ]);
 
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            $fieldsWithErrorMessagesArray = $validator->messages()->get('*');
+            return response()->json($fieldsWithErrorMessagesArray, 400);
         }
 
         $user = User::create([
@@ -84,6 +83,8 @@ class UserController extends Controller
             return response()->json(['token_absent'], $e->getStatusCode());
 
         }
+
+        $user['gradebook'] = $user->gradebook;
 
         return response()->json(compact('user'));
     }

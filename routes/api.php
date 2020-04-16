@@ -28,4 +28,6 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('closed', 'DataController@closed');
     Route::resource('gradebooks', 'GradebookController');
     Route::resource('users', 'UserController');
+    Route::resource('students', 'StudentController');
+    Route::resource('comments', 'CommentController');
 });
